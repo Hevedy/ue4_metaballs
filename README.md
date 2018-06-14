@@ -1,4 +1,4 @@
-Metaballs FX for Unreal Engine 4.10:
+Metaballs FX for Unreal Engine 4.18:
 
 https://www.youtube.com/watch?v=Z0xbnEMbMxw
 
@@ -28,3 +28,5 @@ Please, make sure that completely installed Microsoft Visual Studio 2015 and Unr
 
 Author:
 Andrey Harchenko, 2016
+
+Updated by Hevedy to the 4.18, 2018
