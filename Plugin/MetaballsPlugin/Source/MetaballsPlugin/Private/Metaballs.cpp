@@ -1,25 +1,26 @@
-
 //=================================================
 // FileName: Metaballs.cpp
 // 
 // Created by: Andrey Harchenko
+// Updated by: Hevedy
 // Project name: Metaballs FX Plugin
-// Unreal Engine version: 4.10
+// Unreal Engine version: 4.18
 // Created on: 2016/03/17
+// Updated on: 2018/06/14
 // Initial realisation by: Andreas Jönsson, April 2001
 //
 // -------------------------------------------------
 // For parts referencing UE4 code, the following copyright applies:
-// Copyright 1998-2015 Epic Games, Inc. All Rights Reserved.
+// Copyright 1998-2018 Epic Games, Inc. All Rights Reserved.
 //
 // Feel free to use this software in any commercial/free game.
 // Selling this as a plugin/item, in whole or part, is not allowed.
-// See "License.md" for full licensing details.
+// See "License.md" for full licensing details. <MIT License>
 
 
+#include "Metaballs.h"
 #include "MetaballsPluginPrivatePCH.h"
 #include "CMarchingCubes.h"
-#include "Metaballs.h"
 
 
 
@@ -50,13 +51,14 @@ AMetaballs::AMetaballs(const FObjectInitializer& ObjectInitializer) : Super(Obje
 	m_mesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
 
 	RootComponent = m_mesh;
-	MetaBallsBoundBox->AttachParent = RootComponent;
-	CapsuleComp->AttachParent = RootComponent;
+	MetaBallsBoundBox->SetupAttachment( RootComponent);
+	CapsuleComp->SetupAttachment( RootComponent );
 
 
 	m_Scale = 100.0f;
 	m_NumBalls = 8;
 	m_automode = true;
+	m_AutoSpeed = 1.0f;
 	m_GridStep = AMetaballs::MIN_GRID_STEPS;
 	m_randomseed = false;
 	m_AutoLimitX = 1.0f;
@@ -277,11 +279,11 @@ void AMetaballs::Update(float dt)
 
 	for (int i = 0; i < m_NumBalls; i++)
 	{
-		m_Balls[i].p.X += dt*m_Balls[i].v.X;
-		m_Balls[i].p.Y += dt*m_Balls[i].v.Y;
-		m_Balls[i].p.Z += dt*m_Balls[i].v.Z;
+		m_Balls[i].p.X += m_AutoSpeed*dt*m_Balls[i].v.X;
+		m_Balls[i].p.Y += m_AutoSpeed*dt*m_Balls[i].v.Y;
+		m_Balls[i].p.Z += m_AutoSpeed*dt*m_Balls[i].v.Z;
 
-		m_Balls[i].t -= dt;
+		m_Balls[i].t -= dt*m_AutoSpeed;
 		if (m_Balls[i].t < 0)
 		{
 			m_Balls[i].t = float(rand()) / RAND_MAX;
@@ -301,9 +303,9 @@ void AMetaballs::Update(float dt)
 		y *= fDist;
 		z *= fDist;
 
-		m_Balls[i].v.X += 0.1f*x*dt;
-		m_Balls[i].v.Y += 0.1f*y*dt;
-		m_Balls[i].v.Z += 0.1f*z*dt;
+		m_Balls[i].v.X += 0.1f*x*dt*m_AutoSpeed;
+		m_Balls[i].v.Y += 0.1f*y*dt*m_AutoSpeed;
+		m_Balls[i].v.Z += 0.1f*z*dt*m_AutoSpeed;
 
 		fDist = m_Balls[i].v.X * m_Balls[i].v.X +
 			m_Balls[i].v.Y * m_Balls[i].v.Y +
@@ -843,6 +845,10 @@ void AMetaballs::SetRandomSeed(bool seed)
 void AMetaballs::SetAutoMode(bool mode)
 {
 	m_automode = mode;
+}
+
+void AMetaballs::SetAutoModeSpeed(float speed) {
+	m_AutoSpeed = speed;
 }
 
 float AMetaballs::CheckLimit(float value)

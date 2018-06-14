@@ -1,21 +1,30 @@
 {
-    "FileVersion" : 3,
-    "FriendlyName" : "Metaballs FX Plugin",
-    "Version" : 1,
-    "VersionName": "1.0",
-    "EngineVersion" : "4.10",
-    "Description" : "Provides the code for the Metaballs fx",
-    "Category" : "Metaballs",
-    "CreatedBy" : "Andrey Harchenko",
-    "CreatedByURL" : "",
-    "CanContainContent" : "true",
-	"EnabledByDefault" : true,
+    "FileVersion": 3,
+	"Version": 38,
+	"VersionName": "1.0",
+	"EngineVersion": "4.18.0",
+    "FriendlyName": "Metaballs FX Plugin",
+    "Description": "Provides the code for the Metaballs fx",
+    "Category": "Metaballs",
+    "CreatedBy": "Andrey Harchenko and updated to 4.18 by Hevedy",
+    "CreatedByURL": "",
+    "CanContainContent": "true",
+	"Installed": true,
+	"EnabledByDefault": true,
 
     "Modules" :
     [
         {
             "Name" : "MetaballsPlugin",
-            "Type" : "Runtime"
+            "Type" : "Runtime",
+			"LoadingPhase": "Default"
         } 
-    ]
+    ],
+	"Plugins": 
+	[
+		{
+			"Name": "ProceduralMeshComponent",
+			"Enabled": true
+		}  
+	]
 }
